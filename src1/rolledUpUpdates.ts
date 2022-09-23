@@ -72,7 +72,7 @@ export function updateUserRolledUpData(event: ethereum.Event, user: User, id: st
     }
     hourlyUserTrack.user = user.id
     hourlyUserTrack.hourlyEntryValue = user.entryValue
-    hourlyUserTrack.hourlyXusdlBalance = user.vaultBalance
+    hourlyUserTrack.hourlyVaultBalance = user.vaultBalance
     hourlyUserTrack.save()
 
     // Daily
@@ -105,7 +105,7 @@ export function updateUserRolledUpData(event: ethereum.Event, user: User, id: st
     monthlyUserTrack.monthlyXusdlBalance = user.vaultBalance
     monthlyUserTrack.save()
 }
-export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDecimal, id: string): void {
+export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigDecimal, id: string): void {
     let usdl = Token.load(id)
     if (usdl === null) {
         usdl = new Token(id)
@@ -127,10 +127,10 @@ export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDec
     if (dailyAPYs === null) {
         dailyAPYs = new DailyAPY(dayIndex.toString())
     }
-    dailyAPYs.dailyUSDEarnings = dailyAPYs.dailyUSDEarnings.plus(usdEarnings)
+    dailyAPYs.dailyTokenEarnings = dailyAPYs.dailyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        dailyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(dailyAPYs.avgUSDEarningPerUSDL, dailyAPYs.dailyUSDEarnings, vaultUser.usdLBalance)
+        dailyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(dailyAPYs.avgUSDEarningPerUSDL, dailyAPYs.dailyTokenEarnings, vaultUser.usdLBalance)
         const timePerYear = BigDecimal.fromString("365");
         dailyAPYs.dailyApy =
             calcAPY(dailyAPYs.avgUSDEarningPerUSDL, timePerYear)
@@ -143,10 +143,10 @@ export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDec
     if (weeklyAPYs === null) {
         weeklyAPYs = new WeeklyAPY(weekIndex.toString())
     }
-    weeklyAPYs.weeklyUSDEarnings = weeklyAPYs.weeklyUSDEarnings.plus(usdEarnings)
+    weeklyAPYs.weeklyTokenEarnings = weeklyAPYs.weeklyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        weeklyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(weeklyAPYs.avgUSDEarningPerUSDL, weeklyAPYs.weeklyUSDEarnings, vaultUser.usdLBalance)
+        weeklyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(weeklyAPYs.avgUSDEarningPerUSDL, weeklyAPYs.weeklyTokenEarnings, vaultUser.usdLBalance)
         const timePerYear = BigDecimal.fromString("52.1429");
         weeklyAPYs.weeklyApy =
             calcAPY(weeklyAPYs.avgUSDEarningPerUSDL, timePerYear)
@@ -159,10 +159,10 @@ export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDec
     if (monthlyAPYs === null) {
         monthlyAPYs = new MonthlyAPY(monthIndex.toString())
     }
-    monthlyAPYs.monthlyUSDEarnings = monthlyAPYs.monthlyUSDEarnings.plus(usdEarnings)
+    monthlyAPYs.monthlyTokenEarnings = monthlyAPYs.monthlyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        monthlyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(monthlyAPYs.avgUSDEarningPerUSDL, monthlyAPYs.monthlyUSDEarnings, vaultUser.usdLBalance)
+        monthlyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(monthlyAPYs.avgUSDEarningPerUSDL, monthlyAPYs.monthlyTokenEarnings, vaultUser.usdLBalance)
         const timePerYear = BigDecimal.fromString("12");
         monthlyAPYs.monthlyApy =
             calcAPY(monthlyAPYs.avgUSDEarningPerUSDL, timePerYear)
@@ -174,13 +174,13 @@ export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDec
 function calcAPY(avgUSDEarningPerUSDL: BigDecimal, timePerYear: BigDecimal): BigDecimal {
     return avgUSDEarningPerUSDL.times(BigDecimal.fromString('100')).times(timePerYear)
 }
-function calcAvgUSDEarningPerUSDL(avgUSDEarningPerUSDL: BigDecimal, USDEarnings: BigDecimal, usdlBalanceForXusdlContract: BigDecimal): BigDecimal {
+function calcAvgUSDEarningPerUSDL(avgUSDEarningPerUSDL: BigDecimal, totalTokenEarnings: BigDecimal, usdlBalanceForXusdlContract: BigDecimal): BigDecimal {
     if (avgUSDEarningPerUSDL === ZERO_BD) {
-        avgUSDEarningPerUSDL = USDEarnings.div(usdlBalanceForXusdlContract)
+        avgUSDEarningPerUSDL = totalTokenEarnings.div(usdlBalanceForXusdlContract)
     } else {
         avgUSDEarningPerUSDL =
             avgUSDEarningPerUSDL
-                .plus(USDEarnings.div(usdlBalanceForXusdlContract))
+                .plus(totalTokenEarnings.div(usdlBalanceForXusdlContract))
                 .div(BigDecimal.fromString('2'))
     }
     return avgUSDEarningPerUSDL;

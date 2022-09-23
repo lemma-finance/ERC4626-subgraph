@@ -17,14 +17,14 @@ type Vault @entity{
   id: ID!
   totalSupply: BigDecimal!
   pricePerShare: BigDecimal!
-  USDEarnings:  BigDecimal!
+  totalTokenEarnings:  BigDecimal!
   minimumLock: BigInt!
   peripheryAddress: Bytes!
 }
 type HourlyUserTrack @entity{
   id: ID!
   user: User!
-  hourlyXusdlBalance:BigDecimal!
+  hourlyVaultBalance:BigDecimal!
   hourlyEntryValue: BigDecimal!
 }
 type DailyUserTrack @entity{
@@ -56,19 +56,19 @@ type MonthlyVolume @entity{
 }
 type DailyAPY @entity{
   id: ID!
-  dailyUSDEarnings: BigDecimal!
+  dailyTokenEarnings: BigDecimal!
   avgUSDEarningPerUSDL:BigDecimal!
   dailyApy: BigDecimal!
 }
 type WeeklyAPY @entity{
   id: ID!
-  weeklyUSDEarnings: BigDecimal!
+  weeklyTokenEarnings: BigDecimal!
   avgUSDEarningPerUSDL:BigDecimal!
   weeklyApy: BigDecimal!
 }
 type MonthlyAPY @entity{
   id: ID!
-  monthlyUSDEarnings: BigDecimal!
+  monthlyTokenEarnings: BigDecimal!
   avgUSDEarningPerUSDL:BigDecimal!
   monthlyApy: BigDecimal!
 }

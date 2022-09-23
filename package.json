@@ -1,0 +1,24 @@
+{
+  "name": "basisTradingStablecoinSubgraph",
+  "version": "0.1.0",
+  "scripts": {
+    "prepare:optimism": "mustache config/optimism.json subgraph.template.yaml > subgraph.yaml; mustache config/optimism.json const.template.ts > src/const.ts",
+    "build-contract": "solc contracts/Gravity.sol --abi -o abis --overwrite && solc contracts/Gravity.sol --bin -o bin --overwrite",
+    "create": "graph create yashnaman/basisTradingStablecoinSubgraph --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create yashnaman/basisTradingStablecoinSubgraph --node http://127.0.0.1:8020",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy yashnaman/basisTradingStablecoinSubgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy:optimism": "graph deploy --product hosted-service yashnaman/erc4626"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.22.1",
+    "@graphprotocol/graph-ts": "^0.22.1"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
+    "dotenv": "^10.0.0",
+    "mustache": "^4.2.0"
+  }
+}

@@ -1,0 +1,1 @@
+export const VAULT_ADDRESS = "{{ ERC4626 }}"

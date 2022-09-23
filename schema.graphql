@@ -1,0 +1,74 @@
+type User @entity{
+  id: ID!
+  tokenBalance:BigDecimal!
+  vaultBalance:BigDecimal!
+  entryValue: BigDecimal!
+  realizedEarnings: BigDecimal!
+  hourlyUserData: [HourlyUserTrack!]! @derivedFrom(field: "user")
+  dailyUserData: [DailyUserTrack!]! @derivedFrom(field: "user")
+  monthlyUserData: [MonthlyUserTrack!]! @derivedFrom(field: "user")
+}
+type Token @entity{
+  id: ID!
+  totalSupply: BigDecimal!
+  multiplier: BigDecimal!
+}
+type ERC4626 @entity{
+  id: ID!
+  totalSupply: BigDecimal!
+  pricePerShare: BigDecimal!
+  USDEarnings:  BigDecimal!
+  minimumLock: BigInt!
+  peripheryAddress: Bytes!
+}
+type HourlyUserTrack @entity{
+  id: ID!
+  user: User!
+  hourlyXusdlBalance:BigDecimal!
+  hourlyEntryValue: BigDecimal!
+}
+type DailyUserTrack @entity{
+  id: ID!
+  user: User!
+  dailyXusdlBalance:BigDecimal!
+  dailyEntryValue: BigDecimal!
+}
+type MonthlyUserTrack @entity{
+  id: ID!
+  user: User!
+  monthlyXusdlBalance:BigDecimal!
+  monthlyEntryValue: BigDecimal!
+}
+type HourlyVolume @entity{
+  id: ID!
+  hourlyVaultTotalSupply: BigDecimal!
+  hourlyPricePerShare: BigDecimal!
+}
+type DailyVolume @entity{
+  id: ID!
+  dailyVaultTotalSupply: BigDecimal!
+  dailyPricePerShare: BigDecimal!
+}
+type MonthlyVolume @entity{
+  id: ID!
+  monthlyVaultTotalSupply: BigDecimal!
+  monthlyPricePerShare: BigDecimal!
+}
+type DailyAPY @entity{
+  id: ID!
+  dailyUSDEarnings: BigDecimal!
+  avgUSDEarningPerUSDL:BigDecimal!
+  dailyApy: BigDecimal!
+}
+type WeeklyAPY @entity{
+  id: ID!
+  weeklyUSDEarnings: BigDecimal!
+  avgUSDEarningPerUSDL:BigDecimal!
+  weeklyApy: BigDecimal!
+}
+type MonthlyAPY @entity{
+  id: ID!
+  monthlyUSDEarnings: BigDecimal!
+  avgUSDEarningPerUSDL:BigDecimal!
+  monthlyApy: BigDecimal!
+}

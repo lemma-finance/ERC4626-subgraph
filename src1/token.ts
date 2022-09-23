@@ -12,10 +12,10 @@ import { updateRolledUpData, updateUserRolledUpData, updateAPYRolledUpData } fro
 
 export function handleTransfer(event: Transfer): void {
 
-    const tokenId = "2";
-    let token = Token.load(tokenId)
+    const id = "2";
+    let token = Token.load(id)
     if (token === null) {
-        token = new Token(tokenId)
+        token = new Token(id)
         token.totalSupply = ZERO_BD
         token.multiplier = ZERO_BD
     }
@@ -23,30 +23,36 @@ export function handleTransfer(event: Transfer): void {
 
     //mint
     if (event.params.from == Address.zero()) {
-        let userTo = User.load(event.params.to.toHex())
+        let userTo = User.load(event.params.to.toHex() + "-" + id)
+
+
+
         if (userTo === null) {
-            userTo = new User(event.params.to.toHex())
+            userTo = new User(event.params.to.toHex() + "-" + id)
 
         }
         userTo.tokenBalance = userTo.tokenBalance.plus(valueInBD)
         userTo.save()
-        updateUserRolledUpData(event, userTo)
+        updateUserRolledUpData(event, userTo, id)
 
         token.totalSupply = token.totalSupply.plus(valueInBD)
         token.save()
     }
     //burn
     else if (event.params.to == Address.zero()) {
-        let userFrom = User.load(event.params.from.toHex())
+        let userFrom = User.load(event.params.from.toHex() + "-" + id)
+
+
+
         if (userFrom === null) {
             //not possible
-            userFrom = new User(event.params.to.toHex())
+            userFrom = new User(event.params.to.toHex() + "-" + id)
             userFrom.tokenBalance = ZERO_BD
             userFrom.vaultBalance = ZERO_BD
         }
         userFrom.tokenBalance = userFrom.tokenBalance.minus(valueInBD)
         userFrom.save()
-        updateUserRolledUpData(event, userFrom)
+        updateUserRolledUpData(event, userFrom, id)
 
         token.totalSupply = token.totalSupply.minus(valueInBD)
         token.save()
@@ -55,35 +61,41 @@ export function handleTransfer(event: Transfer): void {
     //transfer
     else {
         // userTo
-        let userTo = User.load(event.params.to.toHex())
+        let userTo = User.load(event.params.to.toHex() + "-" + id)
+
+
+
         if (userTo === null) {
-            userTo = new User(event.params.to.toHex())
+            userTo = new User(event.params.to.toHex() + "-" + id)
 
         }
         userTo.tokenBalance = userTo.tokenBalance.plus(valueInBD)
         userTo.save()
-        updateUserRolledUpData(event, userTo)
+        updateUserRolledUpData(event, userTo, id)
 
         // userFrom
-        let userFrom = User.load(event.params.from.toHex())
+        let userFrom = User.load(event.params.from.toHex() + "-" + id)
+
+
+
         if (userFrom === null) {
             //not possible
-            userFrom = new User(event.params.to.toHex())
+            userFrom = new User(event.params.to.toHex() + "-" + id)
             userFrom.tokenBalance = ZERO_BD
             userFrom.vaultBalance = ZERO_BD
         }
         userFrom.tokenBalance = userFrom.tokenBalance.minus(valueInBD)
         userFrom.save()
-        updateUserRolledUpData(event, userFrom)
+        updateUserRolledUpData(event, userFrom, id)
     }
 
-    let token1 = Token.load(tokenId);
+    let token1 = Token.load(id);
     if (token1 !== null) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + tokenId)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
         if (vaultUser !== null) {
             token1.multiplier = token1.totalSupply.div(vaultUser.tokenBalance)
         }
         token1.save()
     }
-    updateRolledUpData(event)
+    updateRolledUpData(event, id)
 }

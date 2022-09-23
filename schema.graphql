@@ -13,7 +13,7 @@ type Token @entity{
   totalSupply: BigDecimal!
   multiplier: BigDecimal!
 }
-type ERC4626 @entity{
+type Vault @entity{
   id: ID!
   totalSupply: BigDecimal!
   pricePerShare: BigDecimal!

@@ -1,5 +1,5 @@
 import {
-    User, Token, ERC4626,
+    User, Token, Vault,
     HourlyUserTrack, DailyUserTrack, MonthlyUserTrack,
     HourlyVolume, DailyVolume, MonthlyVolume,
     DailyAPY, WeeklyAPY, MonthlyAPY
@@ -9,36 +9,35 @@ import { Address, BigInt, BigDecimal, ByteArray, ethereum } from '@graphprotocol
 import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
 
 
-export function updateRolledUpData(event: ethereum.Event): void {
-    const usdlId = "2";
-    let usdl = Token.load(usdlId)
+export function updateRolledUpData(event: ethereum.Event, id: string): void {
+    let usdl = Token.load(id)
     if (usdl === null) {
-        usdl = new Token(usdlId)
+        usdl = new Token(id)
     }
-    let vault = ERC4626.load(usdlId)
+    let vault = Vault.load(id)
     if (vault === null) {
-        vault = new ERC4626(usdlId)
+        vault = new Vault(id)
         vault.pricePerShare = ONE_BD
     }
 
     let timestamp = event.block.timestamp.toI32()
 
     // Hourly
-    let hourIndex = calcHourId(timestamp)// get unique hour within unix history
+    let hourIndex = calcHourId(timestamp, id)// get unique hour within unix history
     let hourlyVolume = HourlyVolume.load(hourIndex.toString())
     if (hourlyVolume === null) {
         hourlyVolume = new HourlyVolume(hourIndex.toString())
     }
 
     // Daily
-    let dayIndex = calcDayId(timestamp) // rounded
+    let dayIndex = calcDayId(timestamp, id)  // rounded
     let dailyVolume = DailyVolume.load(dayIndex.toString())
     if (dailyVolume === null) {
         dailyVolume = new DailyVolume(dayIndex.toString())
     }
 
     // Monthly
-    let monthIndex = calcMonthId(timestamp) // rounded
+    let monthIndex = calcMonthId(timestamp, id) // rounded
     let monthlyVolume = MonthlyVolume.load(monthIndex.toString())
     if (monthlyVolume === null) {
         monthlyVolume = new MonthlyVolume(monthIndex.toString())
@@ -58,11 +57,11 @@ export function updateRolledUpData(event: ethereum.Event): void {
     monthlyVolume.save()
 }
 
-export function updateUserRolledUpData(event: ethereum.Event, user: User): void {
+export function updateUserRolledUpData(event: ethereum.Event, user: User, id: string): void {
     let timestamp = event.block.timestamp.toI32()
 
     // Hourly
-    let hourIndex = calcHourId(timestamp) // get unique hour within unix history
+    let hourIndex = calcHourId(timestamp, id) // get unique hour within unix history
     let userHourID = user.id
         .toString()
         .concat('-')
@@ -77,7 +76,7 @@ export function updateUserRolledUpData(event: ethereum.Event, user: User): void 
     hourlyUserTrack.save()
 
     // Daily
-    let dayIndex = calcDayId(timestamp) // rounded
+    let dayIndex = calcDayId(timestamp, id)  // rounded
     let userDailyID = user.id
         .toString()
         .concat('-')
@@ -92,7 +91,7 @@ export function updateUserRolledUpData(event: ethereum.Event, user: User): void 
     dailyUserTrack.save()
 
     // montly
-    let monthIndex = calcMonthId(timestamp) // rounded
+    let monthIndex = calcMonthId(timestamp, id) // rounded
     let userMonthlyID = user.id
         .toString()
         .concat('-')
@@ -106,22 +105,24 @@ export function updateUserRolledUpData(event: ethereum.Event, user: User): void 
     monthlyUserTrack.monthlyXusdlBalance = user.vaultBalance
     monthlyUserTrack.save()
 }
-export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDecimal): void {
-    const usdlId = "2";
-    let usdl = Token.load(usdlId)
+export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDecimal, id: string): void {
+    let usdl = Token.load(id)
     if (usdl === null) {
-        usdl = new Token(usdlId)
+        usdl = new Token(id)
     }
-    let vault = ERC4626.load(usdlId)
+    let vault = Vault.load(id)
     if (vault === null) {
-        vault = new ERC4626(usdlId)
+        vault = new Vault(id)
         vault.pricePerShare = ONE_BD
     }
     let timestamp = event.block.timestamp.toI32()
-    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + vaultId)
+    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
 
     // Daily APY
-    let dayIndex = calcDayId(timestamp) // get unique daily within unix history
+    let dayIndex = calcDayId(timestamp, id)  // get unique daily within unix history
+
+
+
     let dailyAPYs = DailyAPY.load(dayIndex.toString())
     if (dailyAPYs === null) {
         dailyAPYs = new DailyAPY(dayIndex.toString())
@@ -137,7 +138,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDec
     dailyAPYs.save()
 
     // Weekly APY
-    let weekIndex = calcWeekId(timestamp) // get unique weekly within unix history
+    let weekIndex = calcWeekId(timestamp, id) // get unique weekly within unix history
     let weeklyAPYs = WeeklyAPY.load(weekIndex.toString())
     if (weeklyAPYs === null) {
         weeklyAPYs = new WeeklyAPY(weekIndex.toString())
@@ -153,7 +154,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDec
     weeklyAPYs.save()
 
     // Monthly APY
-    let monthIndex = calcMonthId(timestamp) // get unique monthly within unix history
+    let monthIndex = calcMonthId(timestamp, id) // get unique monthly within unix history
     let monthlyAPYs = MonthlyAPY.load(monthIndex.toString())
     if (monthlyAPYs === null) {
         monthlyAPYs = new MonthlyAPY(monthIndex.toString())
@@ -185,19 +186,18 @@ function calcAvgUSDEarningPerUSDL(avgUSDEarningPerUSDL: BigDecimal, USDEarnings:
     return avgUSDEarningPerUSDL;
 
 }
-function calcHourId(timestamp: number): number {
-    return calcIntervalId(timestamp, 3600)
+function calcHourId(timestamp: number, id: string): string {
+    return calcIntervalId(timestamp, 3600, id)
 }
-function calcDayId(timestamp: number): number {
-    return calcIntervalId(timestamp, 86400)
+function calcDayId(timestamp: number, id: string): string {
+    return calcIntervalId(timestamp, 86400, id)
 }
-function calcWeekId(timestamp: number): number {
-    return calcIntervalId(timestamp, 604800)
+function calcWeekId(timestamp: number, id: string): string {
+    return calcIntervalId(timestamp, 604800, id)
 }
-function calcMonthId(timestamp: number): number {
-    return calcIntervalId(timestamp, 2592000)
+function calcMonthId(timestamp: number, id: string): string {
+    return calcIntervalId(timestamp, 2592000, id)
 }
-function calcIntervalId(timestamp: number, interval: number): number {
-    return timestamp - timestamp % interval
+function calcIntervalId(timestamp: number, interval: number, id: string): string {
+    return (timestamp - timestamp % interval).toString() + "-" + id
 }
-

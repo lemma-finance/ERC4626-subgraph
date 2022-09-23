@@ -1,1 +1,1 @@
-export const VAULT_ADDRESS = "{{ ERC4626 }}"
+export const VAULT_ADDRESS = "{{ Vault }}"

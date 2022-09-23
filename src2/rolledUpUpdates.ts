@@ -10,7 +10,7 @@ import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
 
 
 export function updateRolledUpData(event: ethereum.Event): void {
-    const usdlId = "1";
+    const usdlId = "3";
     let usdl = Token.load(usdlId)
     if (usdl === null) {
         usdl = new Token(usdlId)
@@ -107,7 +107,7 @@ export function updateUserRolledUpData(event: ethereum.Event, user: User): void 
     monthlyUserTrack.save()
 }
 export function updateAPYRolledUpData(event: ethereum.Event, usdEarnings: BigDecimal): void {
-    const usdlId = "1";
+    const usdlId = "3";
     let usdl = Token.load(usdlId)
     if (usdl === null) {
         usdl = new Token(usdlId)

@@ -6,7 +6,7 @@ import { VAULT_ADDRESS } from './const';
 import { updateRolledUpData, updateUserRolledUpData } from './rolledUpUpdates';
 
 export function handleDeposit(event: Deposit): void {
-    const vaultId = "1";
+    const vaultId = "3";
     let vault = ERC4626.load(vaultId)
     if (vault === null) {
         vault = new ERC4626(vaultId)
@@ -30,7 +30,7 @@ export function handleDeposit(event: Deposit): void {
     updateRolledUpData(event)
 }
 export function handleWithdraw(event: Withdraw): void {
-    const vaultId = "1";
+    const vaultId = "3";
     let vault = ERC4626.load(vaultId)
     if (vault === null) {
         vault = new ERC4626(vaultId)
@@ -50,7 +50,7 @@ export function handleWithdraw(event: Withdraw): void {
 
 
 export function handleTransfer(event: Transfer): void {
-    const vaultId = "1";
+    const vaultId = "3";
     let vault = ERC4626.load(vaultId)
     if (vault === null) {
         vault = new ERC4626(vaultId)

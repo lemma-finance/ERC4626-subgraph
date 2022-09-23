@@ -12,7 +12,7 @@ import { updateRolledUpData, updateUserRolledUpData, updateAPYRolledUpData } fro
 
 export function handleTransfer(event: Transfer): void {
 
-    const tokenId = "1";
+    const tokenId = "2";
     let token = Token.load(tokenId)
     if (token === null) {
         token = new Token(tokenId)

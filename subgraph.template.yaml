@@ -63,3 +63,121 @@ dataSources:
         - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleWithdraw
       file: ./src/ERC4626.ts
+  - kind: ethereum/contract
+    name: Token1
+    network: {{network}}
+    source:
+      address: "{{Token1}}"
+      abi: Token
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Token
+        - ERC4626
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+        - DailyAPY
+        - WeeklyAPY
+        - MonthlyAPY
+      abis:
+        - name: Token
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src1/token.ts
+  - kind: ethereum/contract
+    name: ERC46261
+    network: {{network}}
+    source:
+      address: "{{ERC46261}}"
+      abi: ERC4626
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - ERC4626
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+      abis:
+        - name: ERC4626
+          file: ./abis/ERC4626.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src1/ERC4626.ts
+  - kind: ethereum/contract
+    name: Token2
+    network: {{network}}
+    source:
+      address: "{{Token2}}"
+      abi: Token
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Token
+        - ERC4626
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+        - DailyAPY
+        - WeeklyAPY
+        - MonthlyAPY
+      abis:
+        - name: Token
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src2/token.ts
+  - kind: ethereum/contract
+    name: ERC46262
+    network: {{network}}
+    source:
+      address: "{{ERC46262}}"
+      abi: ERC4626
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - ERC4626
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+      abis:
+        - name: ERC4626
+          file: ./abis/ERC4626.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src2/ERC4626.ts

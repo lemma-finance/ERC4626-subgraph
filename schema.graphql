@@ -10,11 +10,13 @@ type User @entity{
 }
 type Token @entity{
   id: ID!
+  name: String!
   totalSupply: BigDecimal!
   multiplier: BigDecimal!
 }
 type Vault @entity{
   id: ID!
+  name: String!
   totalSupply: BigDecimal!
   pricePerShare: BigDecimal!
   totalTokenEarnings:  BigDecimal!

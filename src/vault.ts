@@ -11,6 +11,7 @@ export function handleDeposit(event: Deposit): void {
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
+        vault.name = "xUSDL"
     }
     let user = User.load(event.params.owner.toHex() + "-" + id)
     if (user === null) {
@@ -35,6 +36,7 @@ export function handleWithdraw(event: Withdraw): void {
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
+        vault.name = "xUSDL"
     }
     //this changes pricePerShare after entryValue is calculated
     if (vault.totalSupply.notEqual(ZERO_BD)) {
@@ -55,6 +57,7 @@ export function handleTransfer(event: Transfer): void {
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
+        vault.name = "xUSDL"
     }
     const valueInBD = convertToDecimal(event.params.amount, BI_18)
 

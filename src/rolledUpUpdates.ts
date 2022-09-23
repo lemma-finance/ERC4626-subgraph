@@ -18,6 +18,7 @@ export function updateRolledUpData(event: ethereum.Event, id: string): void {
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
+        vault.name = "xUSDL"
     }
 
     let timestamp = event.block.timestamp.toI32()
@@ -115,6 +116,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
+        vault.name = "xUSDL"
     }
     let timestamp = event.block.timestamp.toI32()
     let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)

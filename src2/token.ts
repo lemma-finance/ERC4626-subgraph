@@ -19,6 +19,7 @@ export function handleTransfer(event: Transfer): void {
         token = new Token(id)
         token.totalSupply = ZERO_BD
         token.multiplier = ZERO_BD
+        token.name = "LemmaBTC"
     }
     const valueInBD = convertToDecimal(event.params.amount, BI_18)
 

@@ -1,14 +1,11 @@
 import { Transfer } from '../generated/Token/Token'
 import {
-    User, Token,
-    HourlyUserTrack, DailyUserTrack,
-    HourlyVolume, DailyVolume, MonthlyVolume,
-    DailyAPY, WeeklyAPY, MonthlyAPY
+    User, Token
 } from '../generated/schema'
-import { Address, BigInt, BigDecimal, ByteArray } from '@graphprotocol/graph-ts';
+import { Address } from '@graphprotocol/graph-ts';
 import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
 import { VAULT_ADDRESS } from './const';
-import { updateRolledUpData, updateUserRolledUpData, updateAPYRolledUpData } from "./rolledUpUpdates"
+import { updateRolledUpData, updateUserRolledUpData } from "./rolledUpUpdates"
 
 export function handleTransfer(event: Transfer): void {
 
@@ -18,6 +15,7 @@ export function handleTransfer(event: Transfer): void {
         token = new Token(id)
         token.totalSupply = ZERO_BD
         token.multiplier = ZERO_BD
+        token.name = "USDL"
     }
     const valueInBD = convertToDecimal(event.params.amount, BI_18)
 

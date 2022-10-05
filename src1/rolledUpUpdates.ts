@@ -118,7 +118,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
         vault.name = "xLemmaETH"
     }
     let timestamp = event.block.timestamp.toI32()
-    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_1.toLowerCase()).toHex() + "-" + id)
+    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_1).toHex() + "-" + id)
 
     // Daily APY
     let dayIndex = calcDayId(timestamp, id)  // get unique daily within unix history

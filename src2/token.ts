@@ -44,12 +44,14 @@ export function handleTransfer(event: Transfer): void {
         token.totalSupply = token.totalSupply.plus(valueInBD)
         token.save()
 
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
-        if (userTo == vaultUser) {
-            let tokenEarnings = valueInBD;
-            vault.totalTokenEarnings = vault.totalTokenEarnings.plus(tokenEarnings)
-            vault.save();
-            updateAPYRolledUpData(event, tokenEarnings, id)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2).toHex() + "-" + id)
+        if (vaultUser !== null) {
+            if (event.params.to.toHex() == Address.fromString(VAULT_ADDRESS_2).toHex()) {
+                let tokenEarnings = valueInBD;
+                vault.totalTokenEarnings = vault.totalTokenEarnings.plus(tokenEarnings)
+                vault.save();
+                updateAPYRolledUpData(event, tokenEarnings, id)
+            }
         }
 
     }
@@ -72,12 +74,14 @@ export function handleTransfer(event: Transfer): void {
         token.totalSupply = token.totalSupply.minus(valueInBD)
         token.save()
 
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
-        if (userFrom == vaultUser) {
-            let tokenEarnings = ZERO_BD.minus(valueInBD);
-            vault.totalTokenEarnings = vault.totalTokenEarnings.plus(tokenEarnings)
-            vault.save();
-            updateAPYRolledUpData(event, tokenEarnings, id)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2).toHex() + "-" + id)
+        if (vaultUser !== null) {
+            if (event.params.from.toHex() == Address.fromString(VAULT_ADDRESS_2).toHex()) {
+                let tokenEarnings = ZERO_BD.minus(valueInBD);
+                vault.totalTokenEarnings = vault.totalTokenEarnings.plus(tokenEarnings)
+                vault.save();
+                updateAPYRolledUpData(event, tokenEarnings, id)
+            }
         }
     }
     //transfer
@@ -113,7 +117,7 @@ export function handleTransfer(event: Transfer): void {
 
     let token1 = Token.load(id);
     if (token1 !== null) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2).toHex() + "-" + id)
         if (vaultUser !== null) {
             token1.multiplier = token1.totalSupply.div(vaultUser.tokenBalance)
         }

@@ -119,7 +119,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
         vault.name = "xLemmaBTC"
     }
     let timestamp = event.block.timestamp.toI32()
-    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
+    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2).toHex() + "-" + id)
 
     // Daily APY
     // TODO: add id in the id    // new line

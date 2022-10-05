@@ -132,10 +132,10 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     dailyAPYs.dailyTokenEarnings = dailyAPYs.dailyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        dailyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(dailyAPYs.avgUSDEarningPerUSDL, dailyAPYs.dailyTokenEarnings, vaultUser.tokenBalance)
+        dailyAPYs.avgTokenEarningsPerToken = calcAvgTokenEarningsPerToken(dailyAPYs.avgTokenEarningsPerToken, dailyAPYs.dailyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("365");
         dailyAPYs.dailyApy =
-            calcAPY(dailyAPYs.avgUSDEarningPerUSDL, timePerYear)
+            calcAPY(dailyAPYs.avgTokenEarningsPerToken, timePerYear)
     }
     dailyAPYs.save()
 
@@ -148,10 +148,10 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     weeklyAPYs.weeklyTokenEarnings = weeklyAPYs.weeklyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        weeklyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(weeklyAPYs.avgUSDEarningPerUSDL, weeklyAPYs.weeklyTokenEarnings, vaultUser.tokenBalance)
+        weeklyAPYs.avgTokenEarningsPerToken = calcAvgTokenEarningsPerToken(weeklyAPYs.avgTokenEarningsPerToken, weeklyAPYs.weeklyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("52.1429");
         weeklyAPYs.weeklyApy =
-            calcAPY(weeklyAPYs.avgUSDEarningPerUSDL, timePerYear)
+            calcAPY(weeklyAPYs.avgTokenEarningsPerToken, timePerYear)
     }
     weeklyAPYs.save()
 
@@ -164,28 +164,28 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     monthlyAPYs.monthlyTokenEarnings = monthlyAPYs.monthlyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        monthlyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(monthlyAPYs.avgUSDEarningPerUSDL, monthlyAPYs.monthlyTokenEarnings, vaultUser.tokenBalance)
+        monthlyAPYs.avgTokenEarningsPerToken = calcAvgTokenEarningsPerToken(monthlyAPYs.avgTokenEarningsPerToken, monthlyAPYs.monthlyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("12");
         monthlyAPYs.monthlyApy =
-            calcAPY(monthlyAPYs.avgUSDEarningPerUSDL, timePerYear)
+            calcAPY(monthlyAPYs.avgTokenEarningsPerToken, timePerYear)
     }
     monthlyAPYs.save()
 
 }
 
-function calcAPY(avgUSDEarningPerUSDL: BigDecimal, timePerYear: BigDecimal): BigDecimal {
-    return avgUSDEarningPerUSDL.times(BigDecimal.fromString('100')).times(timePerYear)
+function calcAPY(avgTokenEarningsPerToken: BigDecimal, timePerYear: BigDecimal): BigDecimal {
+    return avgTokenEarningsPerToken.times(BigDecimal.fromString('100')).times(timePerYear)
 }
-function calcAvgUSDEarningPerUSDL(avgUSDEarningPerUSDL: BigDecimal, totalTokenEarnings: BigDecimal, usdlBalanceForXusdlContract: BigDecimal): BigDecimal {
-    if (avgUSDEarningPerUSDL === ZERO_BD) {
-        avgUSDEarningPerUSDL = totalTokenEarnings.div(usdlBalanceForXusdlContract)
+function calcAvgTokenEarningsPerToken(avgTokenEarningsPerToken: BigDecimal, totalTokenEarnings: BigDecimal, usdlBalanceForXusdlContract: BigDecimal): BigDecimal {
+    if (avgTokenEarningsPerToken === ZERO_BD) {
+        avgTokenEarningsPerToken = totalTokenEarnings.div(usdlBalanceForXusdlContract)
     } else {
-        avgUSDEarningPerUSDL =
-            avgUSDEarningPerUSDL
+        avgTokenEarningsPerToken =
+            avgTokenEarningsPerToken
                 .plus(totalTokenEarnings.div(usdlBalanceForXusdlContract))
                 .div(BigDecimal.fromString('2'))
     }
-    return avgUSDEarningPerUSDL;
+    return avgTokenEarningsPerToken;
 
 }
 function calcHourId(timestamp: number, id: string): string {

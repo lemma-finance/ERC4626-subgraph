@@ -17,6 +17,7 @@ type Token @entity{
 type Vault @entity{
   id: ID!
   name: String!
+  vaultAddress: Bytes!
   totalSupply: BigDecimal!
   pricePerShare: BigDecimal!
   totalTokenEarnings:  BigDecimal!

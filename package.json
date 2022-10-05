@@ -2,7 +2,7 @@
   "name": "basisTradingStablecoinSubgraph",
   "version": "0.1.0",
   "scripts": {
-    "prepare:optimism": "mustache config/optimism.json subgraph.template.yaml > subgraph.yaml; mustache config/optimism.json const.template.ts > src/const.ts",
+    "prepare:optimism": "mustache config/optimism.json subgraph.template.yaml > subgraph.yaml; mustache config/optimism.json const.template.ts > src/const.ts ; mustache config/optimism.json const.template.ts > src1/const.ts; mustache config/optimism.json const.template.ts > src2/const.ts",
     "build-contract": "solc contracts/Gravity.sol --abi -o abis --overwrite && solc contracts/Gravity.sol --bin -o bin --overwrite",
     "create": "graph create yashnaman/basisTradingStablecoinSubgraph --node https://api.thegraph.com/deploy/",
     "create-local": "graph create yashnaman/basisTradingStablecoinSubgraph --node http://127.0.0.1:8020",

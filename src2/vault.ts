@@ -2,7 +2,7 @@ import { Deposit, Withdraw, Transfer } from '../generated/Vault/Vault'
 import { Vault, User, HourlyUserTrack, DailyUserTrack, HourlyVolume, DailyVolume, MonthlyVolume } from '../generated/schema'
 import { Address, BigInt, BigDecimal, ByteArray } from '@graphprotocol/graph-ts';
 import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
-import { VAULT_ADDRESS } from './const';
+import { VAULT_ADDRESS_2 } from './const';
 import { updateRolledUpData, updateUserRolledUpData } from './rolledUpUpdates';
 
 export function handleDeposit(event: Deposit): void {
@@ -17,11 +17,9 @@ export function handleDeposit(event: Deposit): void {
     if (user === null) {
         user = new User(event.params.owner.toHex())
     }
-
-
     //this changes pricePerShare after entryValue is calculated
     if (vault.totalSupply.notEqual(ZERO_BD)) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
         if (vaultUser !== null) {
             let pricePerShare = vaultUser.tokenBalance.div(vault.totalSupply)
             vault.pricePerShare = pricePerShare
@@ -40,7 +38,7 @@ export function handleWithdraw(event: Withdraw): void {
     }
     //this changes pricePerShare after entryValue is calculated
     if (vault.totalSupply.notEqual(ZERO_BD)) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
         if (vaultUser !== null) {
             let pricePerShare = vaultUser.tokenBalance.div(vault.totalSupply)
             vault.pricePerShare = pricePerShare

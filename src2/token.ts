@@ -1,14 +1,14 @@
 //TODO: generate this automatically
 import { Transfer } from '../generated/Token/Token'
 import {
-    User, Token,
+    User, Token, Vault,
     HourlyUserTrack, DailyUserTrack,
     HourlyVolume, DailyVolume, MonthlyVolume,
     DailyAPY, WeeklyAPY, MonthlyAPY
 } from '../generated/schema'
 import { Address, BigInt, BigDecimal, ByteArray } from '@graphprotocol/graph-ts';
 import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
-import { VAULT_ADDRESS } from './const';
+import { VAULT_ADDRESS_2 } from './const';
 import { updateRolledUpData, updateUserRolledUpData, updateAPYRolledUpData } from "./rolledUpUpdates"
 
 export function handleTransfer(event: Transfer): void {
@@ -21,14 +21,18 @@ export function handleTransfer(event: Transfer): void {
         token.multiplier = ZERO_BD
         token.name = "LemmaBTC"
     }
+    let vault = Vault.load(id)
+    if (vault === null) {
+        vault = new Vault(id)
+        vault.pricePerShare = ONE_BD
+        vault.name = "xUSDL"
+    }
+
     const valueInBD = convertToDecimal(event.params.amount, BI_18)
 
     //mint
     if (event.params.from == Address.zero()) {
         let userTo = User.load(event.params.to.toHex() + "-" + id)
-
-
-
         if (userTo === null) {
             userTo = new User(event.params.to.toHex() + "-" + id)
 
@@ -39,6 +43,15 @@ export function handleTransfer(event: Transfer): void {
 
         token.totalSupply = token.totalSupply.plus(valueInBD)
         token.save()
+
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
+        if (userTo == vaultUser) {
+            let tokenEarnings = valueInBD;
+            vault.totalTokenEarnings = vault.totalTokenEarnings.plus(tokenEarnings)
+            vault.save();
+            updateAPYRolledUpData(event, tokenEarnings, id)
+        }
+
     }
     //burn
     else if (event.params.to == Address.zero()) {
@@ -59,6 +72,13 @@ export function handleTransfer(event: Transfer): void {
         token.totalSupply = token.totalSupply.minus(valueInBD)
         token.save()
 
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
+        if (userFrom == vaultUser) {
+            let tokenEarnings = ZERO_BD.minus(valueInBD);
+            vault.totalTokenEarnings = vault.totalTokenEarnings.plus(tokenEarnings)
+            vault.save();
+            updateAPYRolledUpData(event, tokenEarnings, id)
+        }
     }
     //transfer
     else {
@@ -93,7 +113,7 @@ export function handleTransfer(event: Transfer): void {
 
     let token1 = Token.load(id);
     if (token1 !== null) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_2.toLowerCase()).toHex() + "-" + id)
         if (vaultUser !== null) {
             token1.multiplier = token1.totalSupply.div(vaultUser.tokenBalance)
         }

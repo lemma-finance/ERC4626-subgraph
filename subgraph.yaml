@@ -38,7 +38,7 @@ dataSources:
     name: Vault
     network: optimism
     source:
-      address: "0x252Ea7E68a27390Ce0D53851192839A39Ab8B38C"
+      address: "0x252ea7e68a27390ce0d53851192839a39ab8b38c"
       abi: Vault
       startBlock: 23745115
     mapping:
@@ -97,7 +97,7 @@ dataSources:
     name: Vault1
     network: optimism
     source:
-      address: "0x89c4e9a23Db43641e1B3C5E0691b100E64b50E32"
+      address: "0x89c4e9a23db43641e1b3c5e0691b100e64b50e32"
       abi: Vault
       startBlock: 23745115
     mapping:
@@ -156,7 +156,7 @@ dataSources:
     name: Vault2
     network: optimism
     source:
-      address: "0x7D39583e262CBe75a1D698A6D79cd5a2958cb61d"
+      address: "0x7d39583e262cbe75a1d698a6d79cd5a2958cb61d"
       abi: Vault
       startBlock: 23745115
     mapping:

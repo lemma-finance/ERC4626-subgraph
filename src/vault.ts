@@ -21,7 +21,7 @@ export function handleDeposit(event: Deposit): void {
 
     //this changes pricePerShare after entryValue is calculated
     if (vault.totalSupply.notEqual(ZERO_BD)) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS.toLowerCase()).toHex() + "-" + id)
         if (vaultUser !== null) {
             let pricePerShare = vaultUser.tokenBalance.div(vault.totalSupply)
             vault.pricePerShare = pricePerShare
@@ -40,7 +40,7 @@ export function handleWithdraw(event: Withdraw): void {
     }
     //this changes pricePerShare after entryValue is calculated
     if (vault.totalSupply.notEqual(ZERO_BD)) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS.toLowerCase()).toHex() + "-" + id)
         if (vaultUser !== null) {
             let pricePerShare = vaultUser.tokenBalance.div(vault.totalSupply)
             vault.pricePerShare = pricePerShare

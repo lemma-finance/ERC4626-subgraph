@@ -4,7 +4,7 @@ import {
     HourlyVolume, DailyVolume, MonthlyVolume,
     DailyAPY, WeeklyAPY, MonthlyAPY
 } from '../generated/schema'
-import { VAULT_ADDRESS } from './const';
+import { VAULT_ADDRESS_1 } from './const';
 import { Address, BigInt, BigDecimal, ByteArray, ethereum } from '@graphprotocol/graph-ts';
 import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
 
@@ -118,7 +118,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
         vault.name = "xLemmaETH"
     }
     let timestamp = event.block.timestamp.toI32()
-    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS_1.toLowerCase()).toHex() + "-" + id)
 
     // Daily APY
     let dayIndex = calcDayId(timestamp, id)  // get unique daily within unix history
@@ -132,7 +132,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     dailyAPYs.dailyTokenEarnings = dailyAPYs.dailyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        dailyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(dailyAPYs.avgUSDEarningPerUSDL, dailyAPYs.dailyTokenEarnings, vaultUser.usdLBalance)
+        dailyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(dailyAPYs.avgUSDEarningPerUSDL, dailyAPYs.dailyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("365");
         dailyAPYs.dailyApy =
             calcAPY(dailyAPYs.avgUSDEarningPerUSDL, timePerYear)
@@ -148,7 +148,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     weeklyAPYs.weeklyTokenEarnings = weeklyAPYs.weeklyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        weeklyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(weeklyAPYs.avgUSDEarningPerUSDL, weeklyAPYs.weeklyTokenEarnings, vaultUser.usdLBalance)
+        weeklyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(weeklyAPYs.avgUSDEarningPerUSDL, weeklyAPYs.weeklyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("52.1429");
         weeklyAPYs.weeklyApy =
             calcAPY(weeklyAPYs.avgUSDEarningPerUSDL, timePerYear)
@@ -164,7 +164,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     monthlyAPYs.monthlyTokenEarnings = monthlyAPYs.monthlyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        monthlyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(monthlyAPYs.avgUSDEarningPerUSDL, monthlyAPYs.monthlyTokenEarnings, vaultUser.usdLBalance)
+        monthlyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(monthlyAPYs.avgUSDEarningPerUSDL, monthlyAPYs.monthlyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("12");
         monthlyAPYs.monthlyApy =
             calcAPY(monthlyAPYs.avgUSDEarningPerUSDL, timePerYear)

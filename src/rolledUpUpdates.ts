@@ -119,7 +119,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
         vault.name = "xUSDL"
     }
     let timestamp = event.block.timestamp.toI32()
-    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS.toLowerCase()).toHex() + "-" + id)
 
     // Daily APY
     // TODO: add id in the id    // new line
@@ -134,7 +134,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     dailyAPYs.dailyTokenEarnings = dailyAPYs.dailyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        dailyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(dailyAPYs.avgUSDEarningPerUSDL, dailyAPYs.dailyTokenEarnings, vaultUser.usdLBalance)
+        dailyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(dailyAPYs.avgUSDEarningPerUSDL, dailyAPYs.dailyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("365");
         dailyAPYs.dailyApy =
             calcAPY(dailyAPYs.avgUSDEarningPerUSDL, timePerYear)
@@ -150,7 +150,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     weeklyAPYs.weeklyTokenEarnings = weeklyAPYs.weeklyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        weeklyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(weeklyAPYs.avgUSDEarningPerUSDL, weeklyAPYs.weeklyTokenEarnings, vaultUser.usdLBalance)
+        weeklyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(weeklyAPYs.avgUSDEarningPerUSDL, weeklyAPYs.weeklyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("52.1429");
         weeklyAPYs.weeklyApy =
             calcAPY(weeklyAPYs.avgUSDEarningPerUSDL, timePerYear)
@@ -166,7 +166,7 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     monthlyAPYs.monthlyTokenEarnings = monthlyAPYs.monthlyTokenEarnings.plus(TokenEarnings)
 
     if (vaultUser !== null) {
-        monthlyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(monthlyAPYs.avgUSDEarningPerUSDL, monthlyAPYs.monthlyTokenEarnings, vaultUser.usdLBalance)
+        monthlyAPYs.avgUSDEarningPerUSDL = calcAvgUSDEarningPerUSDL(monthlyAPYs.avgUSDEarningPerUSDL, monthlyAPYs.monthlyTokenEarnings, vaultUser.tokenBalance)
         const timePerYear = BigDecimal.fromString("12");
         monthlyAPYs.monthlyApy =
             calcAPY(monthlyAPYs.avgUSDEarningPerUSDL, timePerYear)

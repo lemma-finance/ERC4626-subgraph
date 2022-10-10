@@ -5,5 +5,5 @@
  * yarn deploy:optimism
 
 ## NOTE
-- Keep the addresses in config/optimism.json without the checksum
+- Keep the addresses in config/optimism.json in Lower case
 

@@ -2,16 +2,19 @@ import { Deposit, Withdraw, Transfer } from '../generated/Vault/Vault'
 import { Vault, User, HourlyUserTrack, DailyUserTrack, HourlyVolume, DailyVolume, MonthlyVolume } from '../generated/schema'
 import { Address, BigInt, BigDecimal, ByteArray } from '@graphprotocol/graph-ts';
 import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
-import { VAULT_ADDRESS } from './const';
+import {tokens,vaults,tokenNames} from "./const";
+
 import { updateRolledUpData, updateUserRolledUpData } from './rolledUpUpdates';
 
 export function handleDeposit(event: Deposit): void {
-    const id = "1";
+    let index = vaults.indexOf(event.address.toHexString())
+    let id = index.toString();
+
     let vault = Vault.load(id)
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
-        vault.name = "xUSDL"
+        vault.name = "x" + tokenNames[index]
     }
     let user = User.load(event.params.owner.toHex() + "-" + id)
     if (user === null) {
@@ -21,7 +24,7 @@ export function handleDeposit(event: Deposit): void {
 
     //this changes pricePerShare after entryValue is calculated
     if (vault.totalSupply.notEqual(ZERO_BD)) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(vaults[index]).toHex() + "-" + id)
         if (vaultUser !== null) {
             let pricePerShare = vaultUser.tokenBalance.div(vault.totalSupply)
             vault.pricePerShare = pricePerShare
@@ -31,16 +34,18 @@ export function handleDeposit(event: Deposit): void {
     updateRolledUpData(event, id)
 }
 export function handleWithdraw(event: Withdraw): void {
-    const id = "1";
+    let index = vaults.indexOf(event.address.toHexString())
+    let id = index.toString();
+
     let vault = Vault.load(id)
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
-        vault.name = "xUSDL"
+        vault.name = "x" + tokenNames[index];
     }
     //this changes pricePerShare after entryValue is calculated
     if (vault.totalSupply.notEqual(ZERO_BD)) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(vaults[index]).toHex() + "-" + id)
         if (vaultUser !== null) {
             let pricePerShare = vaultUser.tokenBalance.div(vault.totalSupply)
             vault.pricePerShare = pricePerShare
@@ -52,12 +57,14 @@ export function handleWithdraw(event: Withdraw): void {
 
 
 export function handleTransfer(event: Transfer): void {
-    const id = "1";
+     let index = vaults.indexOf(event.address.toHexString())
+    let id = index.toString();
+
     let vault = Vault.load(id)
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
-        vault.name = "xUSDL"
+        vault.name = "x" + tokenNames[index];
     }
     const valueInBD = convertToDecimal(event.params.amount, BI_18)
 

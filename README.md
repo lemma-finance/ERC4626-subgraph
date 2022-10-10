@@ -1,7 +1,9 @@
 # ERC4626-subgraph
-
+ * yarn prepare:optimism
  * yarn codegen
  * yarn build
- * yarn prepare:optimism
  * yarn deploy:optimism
+
+## NOTE
+- Keep the addresses in config/optimism.json without the checksum
 

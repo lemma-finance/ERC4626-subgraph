@@ -1,9 +1,19 @@
 {
     "network": "optimism",
-    "Vault": "0x252ea7e68a27390ce0d53851192839a39ab8b38c",
-    "Token": "0x96F2539d3684dbde8B3242A51A73B66360a5B541",
-    "Vault1": "0x89c4e9a23db43641e1b3c5e0691b100e64b50e32",
-    "Token1": "0x3BC414FA971189783ACee4dEe281067C322E3412",
-    "Vault2": "0x7d39583e262cbe75a1d698a6d79cd5a2958cb61d",
-    "Token2": "0x8A641696Caf0f59bB7a53CF8D2dc943ED95229A6"
+    "totalVaults": 3,
+    "vaults": [
+        "0x252ea7e68a27390ce0d53851192839a39ab8b38c",
+        "0x89c4e9a23db43641e1b3c5e0691b100e64b50e32",
+        "0x7d39583e262cbe75a1d698a6d79cd5a2958cb61d"
+    ],
+    "tokens": [
+        "0x96f2539d3684dbde8b3242a51a73b66360a5b541",
+        "0x3bc414fa971189783acee4dee281067c322e3412",
+        "0x8a641696caf0f59bb7a53cf8d2dc943ed95229a6"
+    ],
+    "tokenNames": [
+        "USDL",
+        "LemmaETH",
+        "LemmaWBTC"
+    ]
 }

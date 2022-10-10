@@ -4,24 +4,24 @@ import {
 } from '../generated/schema'
 import { Address } from '@graphprotocol/graph-ts';
 import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
-import { VAULT_ADDRESS } from './const';
+import {tokens,vaults,tokenNames} from "./const";
 import { updateAPYRolledUpData, updateRolledUpData, updateUserRolledUpData } from "./rolledUpUpdates"
 
 export function handleTransfer(event: Transfer): void {
-
-    const id = "1";
+    let index = tokens.indexOf(event.address.toHexString())
+    let id = index.toString();
     let token = Token.load(id)
     if (token === null) {
         token = new Token(id)
         token.totalSupply = ZERO_BD
         token.multiplier = ZERO_BD
-        token.name = "USDL"
+        token.name = tokenNames[index];
     }
     let vault = Vault.load(id)
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
-        vault.name = "xUSDL"
+        vault.name = "x" + tokenNames[index];
     }
 
     const valueInBD = convertToDecimal(event.params.amount, BI_18)
@@ -39,9 +39,9 @@ export function handleTransfer(event: Transfer): void {
         token.totalSupply = token.totalSupply.plus(valueInBD)
         token.save()
 
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(vaults[index]).toHex() + "-" + id)
         if (vaultUser !== null) {
-            if (event.params.to.toHex() == Address.fromString(VAULT_ADDRESS).toHex()) {
+            if (event.params.to.toHex() == Address.fromString(vaults[index]).toHex()) {
                 let tokenEarnings = valueInBD;
                 vault.totalTokenEarnings = vault.totalTokenEarnings.plus(tokenEarnings)
                 vault.save();
@@ -69,9 +69,9 @@ export function handleTransfer(event: Transfer): void {
         token.totalSupply = token.totalSupply.minus(valueInBD)
         token.save()
 
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(vaults[index]).toHex() + "-" + id)
         if (vaultUser !== null) {
-            if (event.params.from.toHex() == Address.fromString(VAULT_ADDRESS).toHex()) {
+            if (event.params.from.toHex() == Address.fromString(vaults[index]).toHex()) {
                 let tokenEarnings = ZERO_BD.minus(valueInBD);
                 vault.totalTokenEarnings = vault.totalTokenEarnings.plus(tokenEarnings)
                 vault.save();
@@ -107,7 +107,7 @@ export function handleTransfer(event: Transfer): void {
 
     let token1 = Token.load(id);
     if (token1 !== null) {
-        let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+        let vaultUser = User.load(Address.fromString(vaults[index]).toHex() + "-" + id)
         if (vaultUser !== null) {
             token1.multiplier = token1.totalSupply.div(vaultUser.tokenBalance)
         }

@@ -4,9 +4,9 @@ import {
     HourlyVolume, DailyVolume, MonthlyVolume,
     DailyAPY, WeeklyAPY, MonthlyAPY
 } from '../generated/schema'
-import { VAULT_ADDRESS } from './const';
 import { Address, BigInt, BigDecimal, ByteArray, ethereum } from '@graphprotocol/graph-ts';
 import { convertToDecimal, ZERO_BD, BI_18, ONE_BD } from "./utils";
+import {tokens,vaults,tokenNames} from "./const";
 
 
 export function updateRolledUpData(event: ethereum.Event, id: string): void {
@@ -18,7 +18,7 @@ export function updateRolledUpData(event: ethereum.Event, id: string): void {
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
-        vault.name = "xUSDL"
+        vault.name = "Not Possible"
     }
 
     let timestamp = event.block.timestamp.toI32()
@@ -116,10 +116,11 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     if (vault === null) {
         vault = new Vault(id)
         vault.pricePerShare = ONE_BD
-        vault.name = "xUSDL"
+        vault.name = "Not Possible"
     }
     let timestamp = event.block.timestamp.toI32()
-    let vaultUser = User.load(Address.fromString(VAULT_ADDRESS).toHex() + "-" + id)
+    const index = BigInt.fromString(id);
+    let vaultUser = User.load(Address.fromString(vaults[index.toI32()]).toHex() + "-" + id)
 
     // Daily APY
     // TODO: add id in the id    // new line

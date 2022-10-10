@@ -1,3 +1,4 @@
-export const VAULT_ADDRESS = "{{ Vault }}"
-export const VAULT_ADDRESS_1 = "{{ Vault1 }}"
-export const VAULT_ADDRESS_2 = "{{ Vault2 }}"
+// @ts-nocheck
+export const vaults = [{{#vaults}}"{{.}}",{{/vaults}}""]
+export const tokens = [{{#tokens}}"{{.}}",{{/tokens}}""]
+export const tokenNames = [{{#tokenNames}}"{{.}}",{{/tokenNames}}""]

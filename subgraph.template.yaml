@@ -3,12 +3,17 @@ description: Lemma's basis trading stablecoin subgraph
 repository: https://github.com/lemma-finance/basis-trading-stablecoin-subgraph
 schema:
   file: ./schema.graphql
+# {{#tokens}}
+# * {{.}}
+# {{/tokens}}
+
 dataSources:
+{{#tokens}}
   - kind: ethereum/contract
-    name: Token
+    name: Token{{ . }}
     network: {{network}}
     source:
-      address: "{{Token}}"
+      address: "{{ . }}"
       abi: Token
       startBlock: 23745115
     mapping:
@@ -34,11 +39,13 @@ dataSources:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./src/token.ts
+{{/tokens}}
+{{#vaults}}
   - kind: ethereum/contract
-    name: Vault
+    name: Vault{{ . }}
     network: {{network}}
     source:
-      address: "{{Vault}}"
+      address: "{{ . }}"
       abi: Vault
       startBlock: 23745115
     mapping:
@@ -63,121 +70,4 @@ dataSources:
         - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleWithdraw
       file: ./src/vault.ts
-  - kind: ethereum/contract
-    name: Token1
-    network: {{network}}
-    source:
-      address: "{{Token1}}"
-      abi: Token
-      startBlock: 23745115
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - User
-        - Token
-        - Vault
-        - HourlyUserTrack
-        - DailyUserTrack
-        - DailyVolume
-        - HourlyVolume
-        - MonthlyVolume
-        - DailyAPY
-        - WeeklyAPY
-        - MonthlyAPY
-      abis:
-        - name: Token
-          file: ./abis/ERC20.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-      file: ./src1/token.ts
-  - kind: ethereum/contract
-    name: Vault1
-    network: {{network}}
-    source:
-      address: "{{Vault1}}"
-      abi: Vault
-      startBlock: 23745115
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - Vault
-        - HourlyUserTrack
-        - DailyUserTrack
-        - DailyVolume
-        - HourlyVolume
-        - MonthlyVolume
-      abis:
-        - name: Vault
-          file: ./abis/ERC4626.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-        - event: Deposit(indexed address,indexed address,uint256,uint256)
-          handler: handleDeposit
-        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleWithdraw
-      file: ./src1/vault.ts
-  - kind: ethereum/contract
-    name: Token2
-    network: {{network}}
-    source:
-      address: "{{Token2}}"
-      abi: Token
-      startBlock: 23745115
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - User
-        - Token
-        - Vault
-        - HourlyUserTrack
-        - DailyUserTrack
-        - DailyVolume
-        - HourlyVolume
-        - MonthlyVolume
-        - DailyAPY
-        - WeeklyAPY
-        - MonthlyAPY
-      abis:
-        - name: Token
-          file: ./abis/ERC20.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-      file: ./src2/token.ts
-  - kind: ethereum/contract
-    name: Vault2
-    network: {{network}}
-    source:
-      address: "{{Vault2}}"
-      abi: Vault
-      startBlock: 23745115
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - Vault
-        - HourlyUserTrack
-        - DailyUserTrack
-        - DailyVolume
-        - HourlyVolume
-        - MonthlyVolume
-      abis:
-        - name: Vault
-          file: ./abis/ERC4626.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-        - event: Deposit(indexed address,indexed address,uint256,uint256)
-          handler: handleDeposit
-        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleWithdraw
-      file: ./src2/vault.ts
+{{/vaults}}

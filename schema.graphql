@@ -33,13 +33,13 @@ type HourlyUserTrack @entity{
 type DailyUserTrack @entity{
   id: ID!
   user: User!
-  dailyXusdlBalance:BigDecimal!
+  dailyVaultBalance:BigDecimal!
   dailyEntryValue: BigDecimal!
 }
 type MonthlyUserTrack @entity{
   id: ID!
   user: User!
-  monthlyXusdlBalance:BigDecimal!
+  monthlyVaultBalance:BigDecimal!
   monthlyEntryValue: BigDecimal!
 }
 type HourlyVolume @entity{

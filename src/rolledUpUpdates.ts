@@ -10,10 +10,6 @@ import {tokens,vaults,tokenNames} from "./const";
 
 
 export function updateRolledUpData(event: ethereum.Event, id: string): void {
-    let usdl = Token.load(id)
-    if (usdl === null) {
-        usdl = new Token(id)
-    }
     let vault = Vault.load(id)
     if (vault === null) {
         vault = new Vault(id)
@@ -89,7 +85,7 @@ export function updateUserRolledUpData(event: ethereum.Event, user: User, id: st
     }
     dailyUserTrack.user = user.id
     dailyUserTrack.dailyEntryValue = user.entryValue
-    dailyUserTrack.dailyXusdlBalance = user.vaultBalance
+    dailyUserTrack.dailyVaultBalance = user.vaultBalance
     dailyUserTrack.save()
 
     // montly
@@ -104,14 +100,10 @@ export function updateUserRolledUpData(event: ethereum.Event, user: User, id: st
     }
     monthlyUserTrack.user = user.id
     monthlyUserTrack.monthlyEntryValue = user.entryValue
-    monthlyUserTrack.monthlyXusdlBalance = user.vaultBalance
+    monthlyUserTrack.monthlyVaultBalance = user.vaultBalance
     monthlyUserTrack.save()
 }
 export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigDecimal, id: string): void {
-    let usdl = Token.load(id)
-    if (usdl === null) {
-        usdl = new Token(id)
-    }
     let vault = Vault.load(id)
     if (vault === null) {
         vault = new Vault(id)
@@ -178,13 +170,13 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
 function calcAPY(avgTokenEarningsPerToken: BigDecimal, timePerYear: BigDecimal): BigDecimal {
     return avgTokenEarningsPerToken.times(BigDecimal.fromString('100')).times(timePerYear)
 }
-function calcAvgTokenEarningsPerToken(avgTokenEarningsPerToken: BigDecimal, totalTokenEarnings: BigDecimal, usdlBalanceForXusdlContract: BigDecimal): BigDecimal {
+function calcAvgTokenEarningsPerToken(avgTokenEarningsPerToken: BigDecimal, totalTokenEarnings: BigDecimal, tokenBalanceForVaultContract: BigDecimal): BigDecimal {
     if (avgTokenEarningsPerToken === ZERO_BD) {
-        avgTokenEarningsPerToken = totalTokenEarnings.div(usdlBalanceForXusdlContract)
+        avgTokenEarningsPerToken = totalTokenEarnings.div(tokenBalanceForVaultContract)
     } else {
         avgTokenEarningsPerToken =
             avgTokenEarningsPerToken
-                .plus(totalTokenEarnings.div(usdlBalanceForXusdlContract))
+                .plus(totalTokenEarnings.div(tokenBalanceForVaultContract))
                 .div(BigDecimal.fromString('2'))
     }
     return avgTokenEarningsPerToken;

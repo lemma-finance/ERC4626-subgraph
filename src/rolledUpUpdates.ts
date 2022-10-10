@@ -123,7 +123,6 @@ export function updateAPYRolledUpData(event: ethereum.Event, TokenEarnings: BigD
     let vaultUser = User.load(Address.fromString(vaults[index.toI32()]).toHex() + "-" + id)
 
     // Daily APY
-    // TODO: add id in the id    // new line
     let dayIndex = calcDayId(timestamp, id) // get unique daily within unix history
 
 

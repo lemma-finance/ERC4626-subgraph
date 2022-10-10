@@ -10,6 +10,14 @@ schema:
 # 
 # * 0x8a641696caf0f59bb7a53cf8d2dc943ed95229a6
 # 
+# * 0x5c39a4a368ab3c3239d20eb4219e0361bd2ad092
+# 
+# * 0xa7c657a94eb9571f4e94f49943af1130e6d7337c
+# 
+# * 0x546ba811099883bef35fa360e7ded8af439831f3
+# 
+# * 0xd1a988b024c55d7baabb07fd531d63a4e19e3b4c
+# 
 
 dataSources:
   - kind: ethereum/contract
@@ -103,6 +111,126 @@ dataSources:
           handler: handleTransfer
       file: ./src/token.ts
   - kind: ethereum/contract
+    name: Token0x5c39a4a368ab3c3239d20eb4219e0361bd2ad092
+    network: optimism
+    source:
+      address: "0x5c39a4a368ab3c3239d20eb4219e0361bd2ad092"
+      abi: Token
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Token
+        - Vault
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+        - DailyAPY
+        - WeeklyAPY
+        - MonthlyAPY
+      abis:
+        - name: Token
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/token.ts
+  - kind: ethereum/contract
+    name: Token0xa7c657a94eb9571f4e94f49943af1130e6d7337c
+    network: optimism
+    source:
+      address: "0xa7c657a94eb9571f4e94f49943af1130e6d7337c"
+      abi: Token
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Token
+        - Vault
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+        - DailyAPY
+        - WeeklyAPY
+        - MonthlyAPY
+      abis:
+        - name: Token
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/token.ts
+  - kind: ethereum/contract
+    name: Token0x546ba811099883bef35fa360e7ded8af439831f3
+    network: optimism
+    source:
+      address: "0x546ba811099883bef35fa360e7ded8af439831f3"
+      abi: Token
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Token
+        - Vault
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+        - DailyAPY
+        - WeeklyAPY
+        - MonthlyAPY
+      abis:
+        - name: Token
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/token.ts
+  - kind: ethereum/contract
+    name: Token0xd1a988b024c55d7baabb07fd531d63a4e19e3b4c
+    network: optimism
+    source:
+      address: "0xd1a988b024c55d7baabb07fd531d63a4e19e3b4c"
+      abi: Token
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Token
+        - Vault
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+        - DailyAPY
+        - WeeklyAPY
+        - MonthlyAPY
+      abis:
+        - name: Token
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/token.ts
+  - kind: ethereum/contract
     name: Vault0x252ea7e68a27390ce0d53851192839a39ab8b38c
     network: optimism
     source:
@@ -165,6 +293,122 @@ dataSources:
     network: optimism
     source:
       address: "0x7d39583e262cbe75a1d698a6d79cd5a2958cb61d"
+      abi: Vault
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+      abis:
+        - name: Vault
+          file: ./abis/ERC4626.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src/vault.ts
+  - kind: ethereum/contract
+    name: Vault0x823c55654d6e860f40070ee5625ff8b091df4269
+    network: optimism
+    source:
+      address: "0x823c55654d6e860f40070ee5625ff8b091df4269"
+      abi: Vault
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+      abis:
+        - name: Vault
+          file: ./abis/ERC4626.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src/vault.ts
+  - kind: ethereum/contract
+    name: Vault0x90356c24c1f95cf29543d45122f2554b6a74f201
+    network: optimism
+    source:
+      address: "0x90356c24c1f95cf29543d45122f2554b6a74f201"
+      abi: Vault
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+      abis:
+        - name: Vault
+          file: ./abis/ERC4626.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src/vault.ts
+  - kind: ethereum/contract
+    name: Vault0x754e6134872d7a501ffeba6c186e187dbfdf6f4a
+    network: optimism
+    source:
+      address: "0x754e6134872d7a501ffeba6c186e187dbfdf6f4a"
+      abi: Vault
+      startBlock: 23745115
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+        - HourlyUserTrack
+        - DailyUserTrack
+        - DailyVolume
+        - HourlyVolume
+        - MonthlyVolume
+      abis:
+        - name: Vault
+          file: ./abis/ERC4626.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Withdraw(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src/vault.ts
+  - kind: ethereum/contract
+    name: Vault0x3c7e63ba04ff4d5f0673bc93bbd9e73e9dd37ed2
+    network: optimism
+    source:
+      address: "0x3c7e63ba04ff4d5f0673bc93bbd9e73e9dd37ed2"
       abi: Vault
       startBlock: 23745115
     mapping:

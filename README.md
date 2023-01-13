@@ -4,6 +4,3 @@
  * yarn build
  * yarn deploy:optimism
 
-## NOTE
-- Keep the addresses in config/optimism.json in Lower case
-
